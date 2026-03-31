@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  log-api:
+    build: .
+    container_name: log-api
+    restart: always
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - PORT=3000
+      - LOG_LEVEL=info
+      - NODE_ENV=production
+      - LOG_SAMPLING_RATE=1.0 # Altere para 0.1 se quiser logar apenas 10% do tráfego
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "2"
+    # Volume para persistir logs se quiser (embora stdout seja bom)
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #     max-size: "10m"
+    #     max-file: "3"

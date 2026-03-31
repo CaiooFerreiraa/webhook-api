@@ -1,0 +1,19 @@
+# Use a imagem oficial do Bun
+FROM oven/bun:latest
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Instala as dependências primeiro para aproveitar o cache de camadas do Docker
+COPY package.json bun.lockb ./
+RUN bun install --production
+
+# Copia o código fonte do projeto
+COPY . .
+
+# Exponha a porta 3000 (onde o Elysia está rodando)
+EXPOSE 3000
+
+# Executa o servidor
+# Usamos o caminho relativo ao root do projeto
+CMD ["bun", "run", "src/index.ts"]
